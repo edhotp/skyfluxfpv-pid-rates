@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172520">
+  <meta name="description" content="Belajar Betaflight PID dan Actual Rates bersama SkyFluxFPV. Enam episode bergaya anime, lab interaktif, kuis, dan sumber resmi.">
+  <meta property="og:title" content="PID & Rates Flight School | SkyFluxFPV">
+  <meta property="og:description" content="Bukan sekadar menyalin angka. Pahami drone-mu lewat 6 episode, dua lab interaktif, dan sumber resmi Betaflight.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://edhotp.github.io/skyfluxfpv-pid-rates/">
+  <title>PID & Rates Flight School | SkyFluxFPV Learning Series</title>
+  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="./assets/fonts/chakra-bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke materi</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="SkyFluxFPV, kembali ke awal">
+      <img src="./assets/mark.svg" width="38" height="38" alt="">
+      <span>SKYFLUX<span class="brand-fpv">FPV</span><small>LEARNING SERIES</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" hidden>Menu <span aria-hidden="true">+</span></button>
+    <nav id="main-nav" aria-label="Navigasi utama">
+      <a href="#episodes">Episode</a>
+      <a href="#rate-lab">Lab Rate</a>
+      <a href="#pid-lab">Lab PID</a>
+      <a href="#sources">Referensi</a>
+      <a href="#quiz" class="nav-cta">Uji pemahaman <span aria-hidden="true">&#8599;</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero section-shell" id="home" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> FLIGHT SCHOOL / CLASS 01</p>
+        <h1 id="hero-title">PAHAMI PID.<br>TEMUKAN<br><span class="outline-text">RATE-MU.</span><span class="title-spark" aria-hidden="true">✦</span></h1>
+        <p class="hero-lede">Drone yang enak diterbangkan dimulai dari pilot yang paham. Masuk ke hanggar, kenali kontrolmu, lalu rasakan bedanya.</p>
+        <div class="hero-actions">
+          <a class="button button-lime" href="#episodes">Mulai perjalanan <span aria-hidden="true">&#8599;</span></a>
+          <a class="text-link" href="#rate-lab">Langsung coba lab <span aria-hidden="true">&#8594;</span></a>
+        </div>
+        <div class="hero-meta"><span><strong>06</strong> episode</span><span><strong>02</strong> lab interaktif</span><span><strong>~48</strong> menit belajar</span></div>
+      </div>
+      <div class="hero-visual">
+        <div class="visual-topline"><span>SKYFLUX // TRAINING HANGAR</span><span>01 / ID</span></div>
+        <img class="hero-art" src="./assets/hangar.svg" width="760" height="820" alt="Aira, pilot anime original berjaket hijau dengan goggles jingga, dan Kiro si robot pendamping di hanggar drone saat matahari terbenam.">
+        <div class="hero-speech"><span class="speaker-label">AIRA / TEST PILOT</span><p>&ldquo;Rate menentukan maumu.<br>PID membantu drone mengejarnya.&rdquo;</p></div>
+        <div class="visual-bottomline"><span><i></i> ACRO MODE: LEARNING</span><span>ORIGINAL VECTOR ART</span></div>
+      </div>
+      <span class="hero-side-note" aria-hidden="true">STICK INPUT &#8594; SETPOINT &#8594; FLIGHT CONTROLLER</span>
+    </section>
+
+    <aside class="safety-strip" aria-label="Peringatan keselamatan">
+      <div class="section-shell safety-inner"><span class="warning-icon" aria-hidden="true">!</span><p><strong>Belajar dulu. Baling-baling lepas saat setup.</strong> Situs ini tidak tersambung ke drone dan bukan alat autotune. Jangan menyalin angka lab ke flight controller.</p><a href="#flight-check">Baca checklist <span aria-hidden="true">&#8599;</span></a></div>
+    </aside>
+
+    <section class="section-shell intro section-pad" id="briefing" aria-labelledby="briefing-title">
+      <div><p class="eyebrow muted">00 / MISSION BRIEF</p><h2 id="briefing-title">Dua hal berbeda.<br>Satu rasa terbang.</h2><p class="section-description">Untuk pilot pemula sampai menengah yang sudah mengenal roll, pitch, yaw, dan dasar keselamatan FPV. Fokus kita <strong>Acro / Rate mode</strong>, bukan self-level pada Angle mode.</p></div>
+      <div class="briefing-board">
+        <div class="signal-chain"><span>STICK<small>Masukan pilot</small></span><b aria-hidden="true">&#8594;</b><span class="chain-rate">RATES<small>Membentuk target</small></span><b aria-hidden="true">&#8594;</b><span class="chain-pid">PID + FF<small>Mengejar target</small></span></div>
+        <p><strong>Rate = penerjemah.</strong> Posisi stick menjadi target kecepatan putar dalam derajat per detik. <strong>PID = tim pengoreksi.</strong> Membandingkan target dengan gyro, lalu mengirim koreksi melalui mixer ke motor. <a class="cite" href="#source-1">[1]</a> <a class="cite" href="#source-3">[3]</a></p>
+        <div class="tiny-note">Gyro memberi umpan balik ke pengontrol. Motor, propeller, filter, dan kondisi fisik ikut menentukan hasil nyata.</div>
+      </div>
+    </section>
+
+    <section class="section-shell section-pad course-section" id="episodes" aria-labelledby="episodes-title">
+      <div class="section-heading"><div><p class="eyebrow muted">01 / THE TRAINING ARC</p><h2 id="episodes-title">Dari bingung ke <span class="serif-word">paham.</span></h2></div><div class="course-progress"><label for="course-progress">Progres membaca <span id="progress-label">0 / 6</span></label><progress id="course-progress" max="6" value="0">0 dari 6 episode</progress></div></div>
+      <p class="section-description">Buka episode secara berurutan. Aira bertanya seperti pilot, Kiro menjelaskan lewat analogi. Fakta teknis tetap terpisah dari ceritanya.</p>
+      <p id="storage-notice" class="notice" role="status" hidden></p>
+      <div class="episode-list">
+        <details class="episode" id="episode-1" name="training-arc" open>
+          <summary><span class="episode-number">01</span><span class="episode-title"><small>THE FIRST TAKEOFF / 6 MENIT</small>Stick bukan tombol kecepatan maju</span><span class="episode-tag">Fondasi</span><span class="episode-plus" aria-hidden="true">+</span></summary>
+          <article class="lesson-body">
+            <p class="lesson-goal"><strong>Misi:</strong> bedakan posisi stick, setpoint, dan laju putar yang terukur.</p>
+            <div class="dialogue"><p><b>AIRA</b> &ldquo;Stick roll-ku kutahan setengah. Kenapa drone terus berputar, bukan miring setengah saja?&rdquo;</p><p><b>KIRO</b> &ldquo;Di Acro, kamu meminta kecepatan putar, bukan sudut kemiringan tertentu.&rdquo;</p></div>
+            <h3>Pesanan dan kenyataan</h3><p>Bayangkan kamu memesan putaran. <strong>Setpoint</strong> adalah pesananmu, misalnya 300&deg;/s pada sumbu roll. <strong>Gyro</strong> membaca putaran yang benar-benar terjadi. Selisih keduanya adalah error yang dipakai pengontrol. Rate membentuk pesanan itu dari posisi stick; PID tidak menentukan selera rate-mu. <a class="cite" href="#source-1">[1]</a> <a class="cite" href="#source-3">[3]</a></p>
+            <p>Roll memutar terhadap sumbu depan-belakang, pitch terhadap sumbu kiri-kanan, yaw terhadap sumbu vertikal badan. Nilai rate bisa berbeda untuk setiap sumbu. Angka derajat per detik adalah <em>laju putar</em>, bukan kecepatan maju atau sudut kamera.</p>
+            <div class="lesson-example"><strong>Hitung cepat</strong><p>Pada laju tetap 360&deg;/s, satu putaran memerlukan 1 detik. Pada 720&deg;/s, sekitar 0,5 detik. Ini hitungan ideal; drone nyata perlu berakselerasi dan bisa dibatasi kemampuan motor.</p></div>
+            <h3>Stick kembali ke tengah?</h3><p>Di Acro, target putaran mendekati nol setelah deadband dan pengolahan input. Drone berusaha berhenti berputar, <strong>bukan otomatis kembali rata</strong>. Angle/Horizon menambah perilaku self-level sehingga tidak dapat disamakan dengan penjelasan Acro di sini.</p>
+            <p class="misconception"><strong>Mitos:</strong> &ldquo;Rate besar berarti drone melaju lebih cepat.&rdquo;<br><strong>Fakta:</strong> rate mengatur target rotasi, bukan batas kecepatan translasi.</p>
+            <p><strong>Ringkasan:</strong> stick &#8594; rate curve &#8594; setpoint; gyro &#8594; putaran terukur; PID membandingkannya.</p><p><strong>Cek pemahaman:</strong> apa yang diminta ketika stick Acro kembali ke tengah? Jawab di soal 1 pada kuis akhir.</p>
+            <div class="lesson-actions"><button type="button" class="complete-button" data-complete="1" aria-pressed="false" hidden>Saya paham episode 01</button><a href="#episode-2" data-open-episode="2">Lanjut: tim P, I, D, dan FF &#8594;</a></div>
+          </article>
+        </details>
+        <details class="episode" id="episode-2" name="training-arc">
+          <summary><span class="episode-number">02</span><span class="episode-title"><small>MEET THE CONTROL CREW / 8 MENIT</small>Empat anggota tim pengendali</span><span class="episode-tag">PID + FF</span><span class="episode-plus" aria-hidden="true">+</span></summary>
+          <article class="lesson-body">
+            <p class="lesson-goal"><strong>Misi:</strong> jelaskan fungsi P, I, D, dan feedforward tanpa mencampur perannya.</p>
+            <div class="dialogue"><p><b>AIRA</b> &ldquo;Kalau P bisa mengoreksi error, kenapa butuh tim?&rdquo;</p><p><b>KIRO</b> &ldquo;Karena merespons, bertahan, dan meredam itu pekerjaan berbeda.&rdquo;</p></div>
+            <div class="term-grid"><div><span class="term-letter p-color">P</span><h3>Si responsif</h3><p>Koreksi sebanding dengan error saat ini. Ibarat pegas: selisih lebih besar, dorongan koreksi lebih besar. Terlalu agresif bisa menimbulkan osilasi.</p></div><div><span class="term-letter i-color">I</span><h3>Si pengingat</h3><p>Mengakumulasi error terhadap waktu, membantu melawan gangguan yang menetap. Bukan sensor posisi dan bukan fitur GPS hold.</p></div><div><span class="term-letter d-color">D</span><h3>Si peredam</h3><p>Di implementasi Acro modern, memakai perubahan gyro yang sudah difilter untuk memberi redaman. Sensitif terhadap noise; bukan ramalan masa depan.</p></div><div><span class="term-letter f-color">FF</span><h3>Si tanggap perintah</h3><p>Feedforward merespons perubahan setpoint agar respons terhadap gerakan stick lebih cepat. Tidak menunggu error seperti P; bukan pengganti feedback.</p></div></div>
+            <p>Analogi pegas dan peredam hanya alat bantu. Betaflight juga memiliki filtering, I-term relax, pembatas integrator, feedforward processing, dan fitur lain. Rujukan kode versi 2026.6.2 menunjukkan P dari error, I yang dibatasi, D dari perubahan gyro, serta F dari perubahan setpoint yang diproses. <a class="cite" href="#source-3">[3]</a></p>
+            <h3>Kenapa tidak semuanya dinaikkan?</h3><p>Drone nyata punya noise, keterlambatan motor, resonansi frame, dan batas tenaga. D yang berlebihan atau filtering yang tidak sesuai dapat meningkatkan panas motor. Menambah P atau D bukan obat universal. Periksa build dan data terlebih dahulu; jangan sengaja mencari batas osilasi pada drone yang belum dipahami.</p>
+            <p class="misconception"><strong>Mitos:</strong> &ldquo;I membuat drone diam di satu titik.&rdquo;<br><strong>Fakta:</strong> rate loop mengendalikan rotasi. Menahan posisi geografis memerlukan sistem lain.</p>
+            <p><strong>Ringkasan:</strong> P mengejar error, I membantu mengoreksi bias yang menetap, D meredam perubahan gerak, FF menanggapi perubahan perintah.</p><p><strong>Cek pemahaman:</strong> kenapa D membutuhkan perhatian pada noise? Lihat soal 2.</p>
+            <div class="lesson-actions"><button type="button" class="complete-button" data-complete="2" aria-pressed="false" hidden>Saya paham episode 02</button><a href="#episode-3" data-open-episode="3">Lanjut: bahasa Actual Rates &#8594;</a></div>
+          </article>
+        </details>
+        <details class="episode" id="episode-3" name="training-arc">
+          <summary><span class="episode-number">03</span><span class="episode-title"><small>THE STICK TRANSLATOR / 7 MENIT</small>Tiga kendali, satu kurva rate</span><span class="episode-tag">Actual Rates</span><span class="episode-plus" aria-hidden="true">+</span></summary>
+          <article class="lesson-body">
+            <p class="lesson-goal"><strong>Misi:</strong> bedakan Center Sensitivity, Max Rate, dan Expo pada model Actual.</p>
+            <div class="dialogue"><p><b>AIRA</b> &ldquo;Aku mau center lebih tenang, tapi ujung stick masih bisa roll cepat.&rdquo;</p><p><b>KIRO</b> &ldquo;Pisahkan rasa di tengah, laju maksimum, dan bentuk transisinya.&rdquo;</p></div>
+            <h3>01 / Center Sensitivity</h3><p>Mengatur kemiringan kurva di dekat stick tengah. Secara matematis satuannya &deg;/s per satu defleksi stick ternormalisasi. Jika nilainya 160, input sangat kecil 1% menghasilkan kira-kira 1,6&deg;/s, bukan 160&deg;/s tepat di tengah. Stick nol tetap menghasilkan nol.</p>
+            <h3>02 / Max Rate</h3><p>Target laju pada ujung stick. Pada konfigurasi lab yang membatasi Center &le; Max, nilai 720 berarti target 720&deg;/s pada 100% stick. Itu permintaan, bukan jaminan putaran drone yang terukur.</p>
+            <h3>03 / Expo</h3><p>Mengubah bentuk transisi antara tengah dan ujung. Pada Actual, center slope dan endpoint tetap ketika Expo diubah. Untuk Center &lt; Max, Expo lebih tinggi menekan bagian kurva di antara tengah dan ujung, lalu mengejar endpoint lebih dekat ujung stick. <a class="cite" href="#source-1">[1]</a> <a class="cite" href="#source-2">[2]</a></p>
+            <div class="lesson-example"><strong>Latihan di lab</strong><p>Biarkan Center 160 dan Max 720. Geser Expo dari 0 ke 1; perhatikan angka pada stick 50% berubah, tetapi pada 0% dan 100% tetap sama.</p></div>
+            <p><strong>Penting:</strong> Actual, Betaflight, Quick, KISS, dan Raceflight adalah model berbeda. Angka yang identik tidak berarti kurvanya identik. Catat <em>jenis model</em> bersama nilai per sumbu. Actual diperkenalkan pada 4.2 dan menjadi default pada 4.3; itu catatan sejarah, bukan saran memakai firmware lama. <a class="cite" href="#source-1">[1]</a></p>
+            <p><strong>Ringkasan:</strong> Center = rasa dekat tengah; Max = endpoint; Expo = transisi. Semua angka lab hanya contoh eksplorasi.</p><p><strong>Cek pemahaman:</strong> bagian mana yang tetap saat Expo Actual diubah? Jawab soal 3.</p>
+            <div class="lesson-actions"><button type="button" class="complete-button" data-complete="3" aria-pressed="false" hidden>Saya paham episode 03</button><a href="#rate-lab">Eksperimen di Lab Rate &#8594;</a></div>
+          </article>
+        </details>
+        <details class="episode" id="episode-4" name="training-arc">
+          <summary><span class="episode-number">04</span><span class="episode-title"><small>FIND YOUR FLIGHT FEEL / 9 MENIT</small>Rate tidak punya satu jawaban benar</span><span class="episode-tag">Latihan pilot</span><span class="episode-plus" aria-hidden="true">+</span></summary>
+          <article class="lesson-body">
+            <p class="lesson-goal"><strong>Misi:</strong> membandingkan dua kurva tanpa mencampurnya dengan perubahan PID.</p>
+            <div class="dialogue"><p><b>AIRA</b> &ldquo;Haruskah aku pakai rate pilot profesional?&rdquo;</p><p><b>KIRO</b> &ldquo;Itu preferensi mereka, bukan ukuran kelulusanmu.&rdquo;</p></div>
+            <h3>Eksperimen yang bisa dibandingkan</h3><ol><li>Mulai di simulator FPV. Catat jenis rate serta nilai roll, pitch, dan yaw yang dipakai.</li><li>Pakai jalur dan manuver sederhana yang sama. Amati koreksi kecil, tikungan, dan kemampuan menghentikan rotasi.</li><li>Ubah satu parameter saja, lalu beri waktu untuk adaptasi. Jangan sekaligus mengganti rate, PID, dan camera angle.</li><li>Catat hasil dengan kalimat spesifik: &ldquo;koreksi dekat center terlalu besar&rdquo; lebih berguna daripada &ldquo;drone aneh&rdquo;.</li></ol>
+            <p>Pada Lab Rate, klik <strong>Simpan pembanding</strong>, ubah satu slider, lalu bandingkan garis putus-putus dengan garis aktif. Lihat laju pada 25%, 50%, 75%, dan 100% stick, bukan hanya angka Max. Bentuk kurva bisa berbeda meskipun endpoint sama.</p>
+            <p>Expo radio dan expo firmware bisa bertumpuk. Untuk eksperimen yang mudah dipahami, pahami dulu kurva yang aktif di radio dan Betaflight. Model lab hanya pemetaan matematis Actual pada satu sumbu, tanpa deadband, RC smoothing, rate limit tambahan, atau pengaruh mode terbang lain. <a class="cite" href="#source-2">[2]</a></p>
+            <p class="misconception"><strong>Mitos:</strong> &ldquo;Rate yang rendah memperbaiki PID yang berosilasi.&rdquo;<br><strong>Fakta:</strong> rate mengubah permintaan pilot, bukan memperbaiki resonansi, noise gyro, atau masalah mekanis.</p>
+            <p><strong>Ringkasan:</strong> cari rate yang bisa kamu kendalikan secara konsisten. Kenyamanan dan presisi lebih penting daripada menyalin angka orang lain.</p><p><strong>Cek pemahaman:</strong> kenapa model rate wajib dicatat? Lihat soal 4.</p>
+            <div class="lesson-actions"><button type="button" class="complete-button" data-complete="4" aria-pressed="false" hidden>Saya paham episode 04</button><a href="#episode-5" data-open-episode="5">Lanjut: lihat data, bukan tebak-tebakan &#8594;</a></div>
+          </article>
+        </details>
+        <details class="episode" id="episode-5" name="training-arc">
+          <summary><span class="episode-number">05</span><span class="episode-title"><small>READ THE BLACKBOX / 10 MENIT</small>Gejala bukan diagnosis tunggal</span><span class="episode-tag">PID & data</span><span class="episode-plus" aria-hidden="true">+</span></summary>
+          <article class="lesson-body">
+            <p class="lesson-goal"><strong>Misi:</strong> membedakan observasi, dugaan penyebab, dan tindakan aman.</p>
+            <div class="dialogue"><p><b>AIRA</b> &ldquo;Ada bounceback setelah roll. Berarti D pasti kurang?&rdquo;</p><p><b>KIRO</b> &ldquo;Belum tentu. Satu gejala bisa punya beberapa penyebab.&rdquo;</p></div>
+            <h3>Mulai dari drone yang sehat</h3><p>Propeller rusak, baut longgar, frame retak, motor atau bearing bermasalah, dan kabel menyentuh gyro dapat mengganggu hasil. Gain bukan penambal mekanik. Gunakan default firmware atau preset yang benar-benar sesuai hardware dan versinya; baca syarat preset, jangan anggap semua preset cocok. <a class="cite" href="#source-7">[7, historis]</a></p>
+            <h3>Apa yang dilihat di log?</h3><p>Bandingkan <strong>setpoint dengan gyro pada sumbu dan segmen waktu yang sama</strong>. Kemudian lihat P/I/D/FF, output motor, noise, dan tanda saturasi jika tersedia pada konfigurasi logging. Delay, overshoot, dan osilasi perlu konteks; tidak ada satu pola visual yang otomatis membuktikan satu gain salah. Fitur dan nama trace bisa berubah menurut versi.</p>
+            <div class="lesson-example"><strong>Contoh pembacaan, bukan resep</strong><p>Jika target berhenti tetapi gyro masih berosilasi, catat frekuensi kejadian, input sebelumnya, kondisi throttle, dan motor. Periksa mekanik serta logging/filtering dengan panduan versi yang cocok. Jangan langsung menaikkan D hanya karena melihat satu pantulan.</p></div>
+            <p>Betaflight 2026.6 mendokumentasikan <strong>Blackbox Viewer</strong> terintegrasi di aplikasi, terpisah dari tab konfigurasi Blackbox. Untuk instalasi lebih lama, alat dan tampilan bisa berbeda. Materi ini tidak mengarahkan pemula memakai fitur Autotune eksperimental atau manuver uji agresif. <a class="cite" href="#source-5">[5]</a></p>
+            <h3>Coba model sederhana</h3><p>Di Lab PID, tambahkan gangguan tetap dan bandingkan P saja dengan P+I. Lalu ubah D untuk mengamati redaman. Angka gain dan respons itu milik model edukasi, <strong>bukan koefisien Betaflight</strong>. Model tidak menyimulasikan resonansi, noise nyata, atau suhu motor.</p>
+            <p><strong>Ringkasan:</strong> build sehat &#8594; baseline sesuai versi &#8594; observasi &#8594; satu perubahan terukur &#8594; evaluasi.</p><p><strong>Cek pemahaman:</strong> apakah bounceback sendirian cukup untuk menentukan D harus dinaikkan? Lihat soal 5.</p>
+            <div class="lesson-actions"><button type="button" class="complete-button" data-complete="5" aria-pressed="false" hidden>Saya paham episode 05</button><a href="#pid-lab">Masuk Lab PID &#8594;</a></div>
+          </article>
+        </details>
+        <details class="episode" id="episode-6" name="training-arc">
+          <summary><span class="episode-number">06</span><span class="episode-title"><small>READY FOR THE NEXT SORTIE / 8 MENIT</small>Checklist pilot yang tidak asal salin</span><span class="episode-tag">Praktik aman</span><span class="episode-plus" aria-hidden="true">+</span></summary>
+          <article class="lesson-body">
+            <p class="lesson-goal"><strong>Misi:</strong> susun rencana belajar dan dokumentasi perubahan yang dapat ditelusuri.</p>
+            <div class="dialogue"><p><b>AIRA</b> &ldquo;Sudah paham grafik. Sekarang langsung tuning?&rdquo;</p><p><b>KIRO</b> &ldquo;Paham grafik itu awal. Keselamatan, kecocokan versi, dan kondisi drone tetap nomor satu.&rdquo;</p></div>
+            <ol><li><strong>Simpan baseline.</strong> Catat versi firmware, versi aplikasi yang kompatibel, hardware, preset, dan profil aktif. Buat backup sebelum perubahan.</li><li><strong>Setup di meja tanpa propeller.</strong> Jangan pernah arm dengan propeller terpasang kecuali benar-benar hendak terbang di tempat yang sesuai. <a class="cite" href="#source-4">[4]</a></li><li><strong>Pisahkan tujuan.</strong> &ldquo;Koreksi center terlalu sensitif&rdquo; adalah pertanyaan rate; &ldquo;gyro tidak mengikuti target&rdquo; perlu pemeriksaan kontrol dan kondisi fisik.</li><li><strong>Catat satu variabel.</strong> Simpan nilai sebelum/sesudah dan alasan perubahan. Jangan menempel dump/CLI lintas versi tanpa verifikasi dokumentasi. <a class="cite" href="#source-7">[7, historis]</a></li><li><strong>Evaluasi secara konservatif.</strong> Jika uji lapangan diperlukan, lakukan di area legal yang kosong dan aman, sesuai kemampuan. Jika timbul osilasi, bunyi tidak wajar, atau dugaan panas berlebih, hentikan pengujian dan disarm dengan aman. Putuskan daya sebelum inspeksi; jangan menyentuh motor berputar atau motor yang mungkin panas.</li><li><strong>Minta bantuan bila ragu.</strong> Gunakan log dan catatan untuk berdiskusi dengan pilot berpengalaman; situs ini tidak menyatakan drone-mu layak terbang.</li></ol>
+            <p class="misconception"><strong>Mitos:</strong> &ldquo;Angka dari tutorial baru pasti cocok di firmware-ku.&rdquo;<br><strong>Fakta:</strong> nama parameter, slider, default, dan perilaku bisa berubah. Cocokkan versi dan hardware.</p>
+            <p><strong>Ringkasan:</strong> pahami konsep, simpan baseline, belajar di simulator, cek keselamatan, dan gunakan bukti.</p><p><strong>Cek pemahaman:</strong> apa aturan propeller saat setup? Selesaikan soal 6, lalu ulangi episode yang masih membingungkan.</p>
+            <div class="lesson-actions"><button type="button" class="complete-button" data-complete="6" aria-pressed="false" hidden>Saya paham episode 06</button><a href="#quiz">Selesaikan kuis akhir &#8594;</a></div>
+          </article>
+        </details>
+      </div>
+    </section>
+
+    <section class="dark-section section-pad" id="rate-lab" aria-labelledby="rate-title">
+      <div class="section-shell">
+        <div class="section-heading"><div><p class="eyebrow lime">02 / HANDS ON, PROPS OFF</p><h2 id="rate-title">Bentuk rasa <span class="serif-word">stick-mu.</span></h2></div><span class="lab-badge">LAB 01 / ACTUAL RATES</span></div>
+        <p class="section-description">Geser, bandingkan, pahami. Kurva matematis Actual mengacu pada kode Betaflight 2026.6.2, bukan tebakan visual. <a class="cite" href="#source-2">[2]</a></p>
+        <noscript><p class="notice">Aktifkan JavaScript untuk menjalankan lab dan kuis. Semua episode dan sumber tetap dapat dibaca tanpa JavaScript.</p></noscript>
+        <div class="lab-layout">
+          <div class="lab-controls">
+            <div class="lab-controls-heading"><span class="mini-label">INPUT PARAMETERS</span><button type="button" id="reset-rates" class="quiet-button" disabled>Reset</button></div>
+            <label class="slider-label" for="center">Center Sensitivity <output id="center-value" for="center">160</output></label>
+            <input id="center" type="range" min="50" max="400" step="10" value="160" disabled>
+            <p class="control-help">Kemiringan dekat tengah / &deg;/s per defleksi normal.</p>
+            <label class="slider-label" for="max-rate">Max Rate <output id="max-rate-value" for="max-rate">720&deg;/s</output></label>
+            <input id="max-rate" type="range" min="400" max="1200" step="10" value="720" disabled>
+            <p class="control-help">Target laju pada ujung stick.</p>
+            <label class="slider-label" for="expo">Expo <output id="expo-value" for="expo">0.45</output></label>
+            <input id="expo" type="range" min="0" max="1" step="0.01" value="0.45" disabled>
+            <p class="control-help">Ubah transisi, bukan center slope atau endpoint.</p>
+            <button type="button" class="button button-outline" id="save-comparison" disabled>Simpan pembanding <span aria-hidden="true">+</span></button>
+            <p class="tiny-note" id="comparison-status" role="status">Belum ada kurva pembanding.</p>
+          </div>
+          <div class="chart-panel">
+            <div class="chart-topline"><span><i class="legend-dot"></i> Kurva aktif</span><span><i class="legend-dash"></i> Pembanding</span><span>ROLL / 1 AXIS</span></div>
+            <svg id="rate-chart" class="lab-chart" viewBox="0 0 640 360" role="img" aria-labelledby="rate-chart-title rate-chart-desc">
+              <title id="rate-chart-title">Kurva Actual Rates</title><desc id="rate-chart-desc">Grafik posisi stick negatif sampai positif terhadap target laju putar. Tabel angka tersedia di bawah grafik.</desc>
+              <g class="chart-grid"><path d="M56 24H614M56 94H614M56 164H614M56 234H614M56 304H614M56 24V304M195.5 24V304M335 24V304M474.5 24V304M614 24V304"></path></g>
+              <g class="chart-axes"><path d="M56 164H614M335 24V304"></path></g>
+              <g class="chart-text"><text x="12" y="29">1200</text><text x="23" y="169">0</text><text x="6" y="309">-1200</text><text x="43" y="329">-100%</text><text x="323" y="329">0%</text><text x="585" y="329">100%</text><text x="56" y="15">LAJU / &deg;/s</text><text x="267" y="352">POSISI STICK</text></g>
+              <path id="comparison-curve" class="comparison-curve" d=""></path><path id="rate-curve" class="rate-curve" d=""></path>
+              <path id="rate-crosshair" class="crosshair" d=""></path><circle id="rate-point" r="6" cx="335" cy="164"></circle>
+            </svg>
+            <div class="stick-readout"><div><label for="stick">COBA POSISI STICK</label><input id="stick" type="range" min="-100" max="100" step="1" value="50" disabled></div><output id="stick-value" for="stick">+50%</output><div class="rate-result"><output id="rate-result" for="stick center max-rate expo">0</output><span>&deg;/s TARGET</span></div></div>
+            <p id="rotation-time" class="tiny-note"></p>
+            <table class="rate-table"><caption>Target putaran pada posisi stick positif</caption><thead><tr><th scope="col">Stick</th><th scope="col">25%</th><th scope="col">50%</th><th scope="col">75%</th><th scope="col">100%</th></tr></thead><tbody><tr><th scope="row">Laju (&deg;/s)</th><td id="rate-at-25">-</td><td id="rate-at-50">-</td><td id="rate-at-75">-</td><td id="rate-at-100">-</td></tr></tbody></table>
+          </div>
+        </div>
+        <p class="lab-disclaimer"><strong>Ruang lingkup:</strong> input ternormalisasi, Actual saja, Center &le; Max. Tanpa deadband, smoothing, batas rate tambahan, maupun dinamika drone. Angka awal adalah contoh edukasi, bukan rekomendasi terbang.</p>
+        <details class="technical-note"><summary>Lihat rumus dan batas interpretasinya</summary><p>Dengan x = stick dari -1 hingga 1, C = center, M = max, dan E = expo:</p><code>r(x) = Cx + max(0, M - C) |x| [(1 - E)x + Ex&#8309;]</code><p>Rumus ditulis ulang secara independen dari hubungan matematis pada <a href="https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/fc/rc.c" target="_blank" rel="noopener noreferrer">fungsi applyActualRates</a>. Center Sensitivity adalah slope di x = 0, bukan output saat x = 0. Lab tidak mengonversi model rates lain.</p></details>
+      </div>
+    </section>
+
+    <section class="section-shell section-pad" id="pid-lab" aria-labelledby="pid-title">
+      <div class="section-heading"><div><p class="eyebrow muted">03 / MEET YOUR FEEDBACK LOOP</p><h2 id="pid-title">Lihat koreksi.<br>Bukan cuma <span class="serif-word">angka.</span></h2></div><span class="lab-badge light-badge">LAB 02 / MODEL KONSEP</span></div>
+      <p class="section-description">Target berubah pada 0,5 detik. Amati respons model, lalu tambahkan gangguan tetap pada detik ke-3. Bagaimana P, I, dan D bekerja bersama?</p>
+      <div class="lab-layout pid-layout">
+        <div class="lab-controls light-controls">
+          <div class="lab-controls-heading"><span class="mini-label">GAIN RELATIF MODEL</span><button type="button" id="reset-pid" class="quiet-button" disabled>Reset</button></div>
+          <label class="slider-label" for="gain-p"><span><b class="p-color">P</b> / Respons error</span><output id="gain-p-value" for="gain-p">2.0</output></label><input id="gain-p" type="range" min="0.5" max="4" step="0.1" value="2" disabled>
+          <label class="slider-label" for="gain-i"><span><b class="i-color">I</b> / Akumulasi error</span><output id="gain-i-value" for="gain-i">1.2</output></label><input id="gain-i" type="range" min="0" max="3" step="0.1" value="1.2" disabled>
+          <label class="slider-label" for="gain-d"><span><b class="d-color">D</b> / Redaman gyro</span><output id="gain-d-value" for="gain-d">0.12</output></label><input id="gain-d" type="range" min="0" max="0.5" step="0.01" value="0.12" disabled>
+          <label class="toggle-label" for="disturbance"><input id="disturbance" type="checkbox" disabled> Tambahkan gangguan tetap</label>
+          <p class="control-help">Gangguan memengaruhi laju model, bukan setpoint.</p><p class="model-warning">Bukan gain Betaflight. Tidak dapat diekspor ke drone.</p>
+        </div>
+        <div class="chart-panel pid-chart-panel">
+          <div class="chart-topline"><span><i class="legend-dash"></i> Setpoint</span><span><i class="legend-dot"></i> Laju model</span><span>6 DETIK / EDUKASI</span></div>
+          <svg id="pid-chart" class="lab-chart" viewBox="0 0 640 360" role="img" aria-labelledby="pid-chart-title pid-chart-desc"><title id="pid-chart-title">Respons model PID sederhana terhadap perubahan setpoint</title><desc id="pid-chart-desc">Garis putus-putus menunjukkan target, garis hijau menunjukkan respons model. Nilai numerik ringkasan ada di bawah grafik. Ini bukan log penerbangan.</desc><g class="chart-grid"><path d="M56 24H614M56 111.5H614M56 199H614M56 286.5H614M56 24V304M149 24V304M242 24V304M335 24V304M428 24V304M521 24V304M614 24V304"></path></g><g class="chart-text"><text x="12" y="29">150%</text><text x="12" y="116">100%</text><text x="20" y="204">50%</text><text x="27" y="291">0%</text><text x="52" y="329">0</text><text x="331" y="329">3</text><text x="606" y="329">6</text><text x="269" y="352">WAKTU / DETIK</text></g><path id="pid-target" class="pid-target" d=""></path><path id="pid-response" class="rate-curve" d=""></path></svg>
+          <div class="pid-stats"><div><span>PUNCAK RESPONS</span><output id="pid-peak">-</output></div><div><span>ERROR AKHIR / TARGET</span><output id="pid-error">-</output></div><div><span>GANGGUAN</span><output id="pid-disturbance">Tidak aktif</output></div></div>
+          <p class="tiny-note">Akhir jendela 6 detik belum tentu keadaan tunak. Lebih kecil error pada model bukan bukti tuning drone lebih baik.</p>
+        </div>
+      </div>
+      <div class="experiment-notes"><p><b>COBA 01</b> Set I = 0, aktifkan gangguan, lalu naikkan I. Bandingkan sisa error.</p><p><b>COBA 02</b> Pertahankan P dan I. Ubah D untuk membandingkan redaman dan kecepatan respons.</p><p><b>INGAT</b> D di drone nyata juga sensitif terhadap noise. Lab bersih ini tidak memodelkan panas motor.</p></div>
+      <details class="technical-note"><summary>Apa sebenarnya yang dimodelkan?</summary><p>Satu sumbu dengan lag aktuator, drag linear, P dari error, integral yang dibatasi, dan D pada perubahan laju terukur. Gain berskala tanpa dimensi, tanpa FF, mixer, resonansi, sensor noise, atau filter Betaflight. Model ini adalah ilustrasi pengajaran, bukan implementasi, digital twin, atau prediksi performa Betaflight. Untuk implementasi nyata gunakan sumber kode yang ditautkan pada referensi [3].</p></details>
+    </section>
+
+    <section class="flight-check section-pad" id="flight-check" aria-labelledby="check-title">
+      <div class="section-shell checklist-layout"><div><p class="eyebrow muted">04 / BEFORE YOU FLY</p><h2 id="check-title">Pilot baik<br>punya <span class="serif-word">checklist.</span></h2><p class="section-description">Tidak ada skor kuis yang menggantikan pemeriksaan drone dan penilaian keselamatan.</p><a class="text-link" href="https://betaflight.com/docs/wiki/guides/current/Safety" target="_blank" rel="noopener noreferrer">Baca panduan keselamatan resmi &#8599;</a></div><ul class="checklist"><li><span>01</span><div><strong>Propeller lepas saat setup.</strong><p>Jangan arm dengan propeller kecuali bermaksud terbang di lokasi yang aman.</p></div></li><li><span>02</span><div><strong>Backup dan cocokkan versi.</strong><p>Catat firmware, aplikasi, hardware, preset, dan profil yang aktif.</p></div></li><li><span>03</span><div><strong>Build sehat sebelum gain.</strong><p>Periksa propeller, frame, motor, pemasangan FC, serta kabel.</p></div></li><li><span>04</span><div><strong>Hentikan jika ada kejanggalan.</strong><p>Osilasi, bunyi tidak wajar, atau dugaan panas berlebih bukan tantangan untuk diteruskan.</p></div></li></ul></div>
+    </section>
+
+    <section class="section-shell section-pad" id="quiz" aria-labelledby="quiz-title">
+      <div class="section-heading"><div><p class="eyebrow muted">05 / YOUR PILOT CHECK</p><h2 id="quiz-title">Sudah siap menjelaskan<br>ke <span class="serif-word">temanmu?</span></h2></div><span class="lab-badge light-badge">6 SOAL / TANPA BATAS WAKTU</span></div>
+      <p class="section-description">Pilih semua jawaban, lalu periksa. Penjelasan baru muncul setelah dikirim. Ini cek pemahaman konsep, bukan sertifikasi pilot.</p>
+      <form id="quiz-form">
+        <div class="quiz-grid">
+          <fieldset aria-describedby="feedback-q1"><legend><span>01</span> Di Acro, stick roll kembali ke tengah berarti...</legend><label><input type="radio" name="q1" value="a" required> Meminta laju roll mendekati nol</label><label><input type="radio" name="q1" value="b"> Meminta drone otomatis kembali rata</label><label><input type="radio" name="q1" value="c"> Menghentikan semua motor</label><p class="quiz-feedback" id="feedback-q1" hidden></p></fieldset>
+          <fieldset aria-describedby="feedback-q2"><legend><span>02</span> Mengapa D harus memperhatikan noise?</legend><label><input type="radio" name="q2" value="a" required> Karena D membaca posisi GPS</label><label><input type="radio" name="q2" value="b"> Karena perubahan gyro berfrekuensi tinggi dapat memperbesar aktivitas D</label><label><input type="radio" name="q2" value="c"> Karena D menentukan kecepatan maksimum stick</label><p class="quiz-feedback" id="feedback-q2" hidden></p></fieldset>
+          <fieldset aria-describedby="feedback-q3"><legend><span>03</span> Pada Actual, mengubah Expo saja mempertahankan...</legend><label><input type="radio" name="q3" value="a" required> Seluruh bentuk kurva</label><label><input type="radio" name="q3" value="b"> PID dan posisi geografis</label><label><input type="radio" name="q3" value="c"> Center slope dan laju di ujung stick</label><p class="quiz-feedback" id="feedback-q3" hidden></p></fieldset>
+          <fieldset aria-describedby="feedback-q4"><legend><span>04</span> Mengapa jenis model rate perlu dicatat?</legend><label><input type="radio" name="q4" value="a" required> Angka sama pada model berbeda belum tentu menghasilkan kurva sama</label><label><input type="radio" name="q4" value="b"> Semua model punya persamaan identik</label><label><input type="radio" name="q4" value="c"> Model rate menentukan jenis baterai</label><p class="quiz-feedback" id="feedback-q4" hidden></p></fieldset>
+          <fieldset aria-describedby="feedback-q5"><legend><span>05</span> Ada bounceback setelah roll. Kesimpulan terbaik?</legend><label><input type="radio" name="q5" value="a" required> D pasti kurang, langsung naikkan</label><label><input type="radio" name="q5" value="b"> Perlu konteks mekanik, log, dan konfigurasi; satu gejala belum cukup</label><label><input type="radio" name="q5" value="c"> Matikan semua filter agar respons cepat</label><p class="quiz-feedback" id="feedback-q5" hidden></p></fieldset>
+          <fieldset aria-describedby="feedback-q6"><legend><span>06</span> Saat setup di meja, tindakan yang benar...</legend><label><input type="radio" name="q6" value="a" required> Menahan drone dengan tangan saat arm</label><label><input type="radio" name="q6" value="b"> Memasang propeller agar hasil terlihat nyata</label><label><input type="radio" name="q6" value="c"> Melepas propeller dan mengikuti panduan keselamatan</label><p class="quiz-feedback" id="feedback-q6" hidden></p></fieldset>
+        </div>
+        <div class="quiz-actions"><button type="submit" class="button button-dark" id="grade-quiz" disabled>Periksa jawaban <span aria-hidden="true">&#8599;</span></button><button type="reset" class="quiet-button" id="reset-quiz" disabled>Ulangi kuis</button><p id="quiz-result" tabindex="-1" role="status">Belum diperiksa.</p></div>
+      </form>
+    </section>
+
+    <section class="sources-section section-pad" id="sources" aria-labelledby="sources-title">
+      <div class="section-shell"><div class="section-heading"><div><p class="eyebrow muted">06 / TRUST THE SOURCE</p><h2 id="sources-title">Gaya anime.<br>Dasar <span class="serif-word">tetap teknis.</span></h2></div><div class="source-stamp">DIPERIKSA<br><strong>16 NOV 2026</strong><span>RUJUKAN KODE 2026.6.2</span></div></div>
+        <p class="section-description">Penjelasan ditulis ulang dalam bahasa Indonesia. Prioritas pada dokumentasi resmi dan kode yang dipatok ke commit rilis, bukan daftar angka tuning dari media sosial.</p>
+        <ol class="sources-list">
+          <li id="source-1"><span class="source-type">DOKUMENTASI RESMI</span><a href="https://betaflight.com/docs/wiki/guides/current/Rate-Calculator" target="_blank" rel="noopener noreferrer">Betaflight / Rate Calculator <span aria-hidden="true">&#8599;</span></a><p>Definisi model rate; Actual: center, max, expo; perbedaan antarmodel.</p></li>
+          <li id="source-2"><span class="source-type">KODE RILIS / PRIMARY SOURCE</span><a href="https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/fc/rc.c" target="_blank" rel="noopener noreferrer">Betaflight 2026.6.2 / rc.c <span aria-hidden="true">&#8599;</span></a><p>Fungsi applyActualRates menjadi acuan matematis Lab Rate. Commit e0b7bb0.</p></li>
+          <li id="source-3"><span class="source-type">KODE RILIS / PRIMARY SOURCE</span><a href="https://github.com/betaflight/betaflight/blob/e0b7bb01b17b21351057e9ead2d1ab39dd44fa16/src/main/flight/pid.c" target="_blank" rel="noopener noreferrer">Betaflight 2026.6.2 / pid.c <span aria-hidden="true">&#8599;</span></a><p>P dari error; I terintegrasi dan dibatasi; D pada gyro; komponen feedforward.</p></li>
+          <li id="source-4"><span class="source-type">KESELAMATAN RESMI</span><a href="https://betaflight.com/docs/wiki/guides/current/Safety" target="_blank" rel="noopener noreferrer">Betaflight / Safety <span aria-hidden="true">&#8599;</span></a><p>Jangan arm dengan propeller kecuali hendak terbang; lepas propeller saat setup.</p></li>
+          <li id="source-5"><span class="source-type">CATATAN RILIS RESMI</span><a href="https://betaflight.com/docs/wiki/release/Betaflight-2026-6-Release-Notes" target="_blank" rel="noopener noreferrer">Betaflight / 2026.6 Release Notes <span aria-hidden="true">&#8599;</span></a><p>Konteks aplikasi yang kompatibel, tampilan yang berubah, dan Blackbox Viewer terintegrasi.</p></li>
+          <li id="source-6"><span class="source-type">VERSI ACUAN</span><a href="https://github.com/betaflight/betaflight/releases/tag/2026.6.2" target="_blank" rel="noopener noreferrer">Betaflight / Release 2026.6.2 <span aria-hidden="true">&#8599;</span></a><p>Rilis stabil yang diverifikasi saat materi dibuat. Bukan instruksi memperbarui semua hardware ke versi ini.</p></li>
+          <li id="source-7"><span class="source-type">DOKUMEN HISTORIS / 4.3</span><a href="https://betaflight.com/docs/wiki/tuning/4-3-Tuning-Notes" target="_blank" rel="noopener noreferrer">Betaflight / 4.3 Tuning Notes <span aria-hidden="true">&#8599;</span></a><p>Konteks preset, backup, dan larangan asal menempel CLI lintas versi. Angka serta menu 4.3 tidak dijadikan resep untuk 2026.6.</p></li>
+        </ol>
+        <p class="version-note"><strong>Catatan versi:</strong> konsep rate dan feedback dapat dipelajari lintas versi, tetapi nama parameter, slider, default, serta fitur berubah. Cocokkan dokumentasi dengan firmware dan aplikasi yang benar-benar dipakai. Materi komunitas independen; tidak berafiliasi dengan tim Betaflight.</p>
+        <details class="studio-notes"><summary>Di balik hanggar: karakter original, storyboard, dan glosarium</summary>
+          <div class="studio-grid"><div><h3>Character bible</h3><p><strong>Aira:</strong> pilot penasaran, rambut jingga dengan satu kuncir pendek, goggles amber, jaket hijau sage, sarung tangan gelap. Bertanya singkat, tidak sok tahu.</p><p><strong>Kiro:</strong> robot pendamping kuning pucat, wajah layar gelap dengan dua mata mint, antena kecil. Menjelaskan dengan analogi, lalu memberi batas teknisnya.</p><p>Ilustrasi SVG original, bukan adaptasi karakter atau franchise anime. Ini situs edukasi bergaya anime dengan visual statis, bukan video animasi atau audio yang dihasilkan.</p></div><div><h3>Glosarium singkat</h3><dl><dt>Setpoint</dt><dd>Target laju rotasi yang diminta pengontrol.</dd><dt>Gyro</dt><dd>Sensor yang mengukur kecepatan rotasi.</dd><dt>Error</dt><dd>Selisih target dan laju yang terukur.</dd><dt>Overshoot</dt><dd>Respons melewati target.</dd><dt>Saturasi</dt><dd>Aktuator mencapai batas kemampuan keluarannya.</dd><dt>Blackbox</dt><dd>Rekaman data internal FC untuk analisis.</dd></dl></div></div>
+          <h3>Storyboard teaser / 6 adegan, bukan video jadi</h3>
+          <div class="table-scroll"><table class="storyboard"><thead><tr><th scope="col">Adegan / durasi</th><th scope="col">Visual & dialog</th><th scope="col">Teks layar</th><th scope="col">Prompt ilustrasi / alt text</th></tr></thead><tbody><tr><td>01 / 20 dtk</td><td>Wide shot hanggar. Aira: &ldquo;Stick meminta apa?&rdquo;</td><td>Input &#8594; target</td><td>Aira dengan desain tetap, menunjuk diagram stick dan drone; anime 2D original, komposisi 16:9. Alt: pilot menunjuk alur perintah.</td></tr><tr><td>02 / 30 dtk</td><td>Close-up panel Kiro. Empat indikator P, I, D, FF menyala.</td><td>Empat peran</td><td>Kiro kuning bermata mint di depan empat modul kontrol; tanpa teks tertanam. Alt: robot menjelaskan tim kontrol.</td></tr><tr><td>03 / 25 dtk</td><td>Over-shoulder Aira mengubah kurva di panel.</td><td>Center / max / expo</td><td>Aira di meja lab hijau-jingga dengan panel kurva kosong untuk overlay HTML. Alt: pilot mempelajari kurva rate.</td></tr><tr><td>04 / 20 dtk</td><td>Split-screen dua jalur latihan yang sama.</td><td>Ubah satu variabel</td><td>Simulator FPV dalam hanggar original, jalur ganda kontras jelas. Alt: perbandingan dua latihan terkontrol.</td></tr><tr><td>05 / 30 dtk</td><td>Close-up dua trace. Kiro: &ldquo;Lihat target dan kenyataan.&rdquo;</td><td>Setpoint vs gyro</td><td>Kiro mengamati panel data, layar tanpa huruf, garis mint dan jingga. Alt: robot menganalisis dua kurva.</td></tr><tr><td>06 / 25 dtk</td><td>Wide shot meja, drone tanpa propeller. Aira menutup checklist.</td><td>Belajar. Cek. Evaluasi.</td><td>Aira dan Kiro dengan desain konsisten di meja drone tanpa propeller. Alt: pemeriksaan setup aman.</td></tr></tbody></table></div>
+          <p class="tiny-note">Prompt di atas adalah bahan produksi opsional, bukan klaim bahwa gambar tambahan atau video sudah dibuat. Visual yang benar-benar tersedia adalah ilustrasi vektor hanggar pada halaman ini.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer section-shell"><a class="brand" href="#home"><img src="./assets/mark.svg" width="32" height="32" alt=""><span>SKYFLUX<span class="brand-fpv">FPV</span><small>LEARNING SERIES</small></span></a><p>Learn the why. Feel the flight.<br><span>Materi Indonesia / karakter original / tanpa pelacak</span></p><a href="https://github.com/edhotp/skyfluxfpv-pid-rates" target="_blank" rel="noopener noreferrer">Source & catatan proyek &#8599;</a></footer>
+</body>
+</html>
